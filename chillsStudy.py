@@ -83,6 +83,9 @@ def experiment(outlet, win, subjectName, subjectId):
         # wait for user to press the continue key ("c")
         win.flip() # clear window
         continuePressed = False
+
+        # get rid of this if statement it is why you dont see the final set of questions
+        # you set the condition type to "watched" before you show the video (in selectVideo)
         if (not all(Conditions.values())) and any(Conditions.values()):
             print(Conditions['condition1'])
             print(Conditions['condition2'])
