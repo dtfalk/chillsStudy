@@ -85,15 +85,8 @@ def opening_screen(win):
     # get user's name and user's subject number
     subject_name, subject_number, win = get_subject_info(win)
     
-    # create save folder if necessary and get the save path
-    subject_data_folder = os.path.join(cur_dir, 'subject_data')
-    if not os.path.isdir(subject_data_folder):
-        os.mkdir(subject_data_folder)
     
-    # File to where we save the user's data
-    data_save_path = os.path.join(subject_data_folder, subject_number + extension)
-    
-    return subject_name, subject_number, data_save_path
+    return subject_name, subject_number
 
 # explains the experiment to the subject
 def experiment_explanation(win):
@@ -164,7 +157,7 @@ def selectVideo(Conditions):
             unusedConditions.append(condition)
     selectedConditionOld = random.choice(unusedConditions)
     selectedCondition = int(selectedConditionOld.replace('condition', '')) - 1
-    selectedVideo = str(numberToLetter[str((selectedCondition * 3) + random.randint(1,3))]) + '.mp4'
+    selectedVideo = str(numberToLetter[str((selectedCondition * 3) + random.randint(1,3))]) + '.mov.mp4'
     #finalVideoPath = os.path.join(stimuli_dir, 'condition1', 'aTest.mov.mp4')
     finalVideoPath = os.path.join(stimuli_dir, selectedConditionOld, selectedVideo)
     Conditions[str(selectedConditionOld)] = True
@@ -246,9 +239,9 @@ def questionnaire(win):
     mouse = event.Mouse(win=win)
     selected_option = None
 
-    things = zip(questionsTotal, optionStimsTotal, checkboxesTotal)
-
-    for question, option_stims, checkboxes in things:
+    things = zip(questionsTotal, optionsTotal, optionStimsTotal, checkboxesTotal)
+    data = []
+    for question, options, option_stims, checkboxes in things:
         selected_option = None
         while selected_option is None:
             question.draw()
@@ -264,10 +257,12 @@ def questionnaire(win):
                         clear_checkboxes(checkboxes)  # Clear all checkboxes (for single-selection)
                         checkbox.fillColor = 'black'  # Fill the clicked checkbox
                         selected_option = i  # Save the selected option index
+                        data.append(options[selected_option])
                         break
 
             win.flip()
             core.wait(0.2)
+    return data
 
 # draw black borders while stimuli being presented?
 def draw_borders(win, scaled_image_size):

@@ -2,10 +2,33 @@ from psychopy import visual, core
 from random import randint
 from helperFunctions import *
 from pylsl import local_clock
+import csv
 
+def saveSubjectData(subjectName, subjectId, data, videoName):
+    curDir = os.path.dirname(__file__)
+    dataFolderPath = os.path.join(curDir, 'data')
+    subjectDataFolderPath = os.path.join(dataFolderPath, subjectId)
+    dataFilePath = os.path.join(subjectDataFolderPath, str(videoName) + '.csv')
 
+    # create data folder if it does not exist
+    if not os.path.exists(dataFolderPath):
+        os.mkdir(dataFolderPath)
+    
+    # create subject data folder if it does not exist
+    if not os.path.exists(subjectDataFolderPath):
+        os.mkdir(subjectDataFolderPath)
+
+    # CSV header
+    header = ['name','question 1', 'question 2', 'question 3', 'question 4', 'question 5', 'question 6', 'question 7']
+
+    with open(file = dataFilePath, mode = 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+        writer.writerow([subjectName] + data)
+
+    
 # The experiment itself
-def experiment(data_save_path, outlet, win, subject_name, subject_number):
+def experiment(outlet, win, subjectName, subjectId):
     
     # path for images folder and image extension label for the videos
     cur_dir = os.path.dirname(__file__)
@@ -69,7 +92,8 @@ def experiment(data_save_path, outlet, win, subject_name, subject_number):
             #         if key == 'c':
             #             continuePressed = True
             # Break screen
-            questionnaire(win)
+            data = questionnaire(win)
+            saveSubjectData(str(subjectName), str(subjectId), data, str(os.path.basename(videoPath)[0]))
                 # break_text = visual.TextStim(win, text="Take a break. Press 'c' when you are ready to continue.", height=0.1, color=(0, 0, 0))
                 # break_text.draw()
                 # win.flip()
@@ -89,12 +113,12 @@ if __name__ == '__main__':
     #mouse.setVisible(False)
     
     # get user info and where to store their results
-    #subject_name, subject_number, data_save_path = opening_screen(win)
+    subjectName, subjectId = opening_screen(win)
     
     # explain the experiment to the subject
-    #experiment_explanation(win)
+    experiment_explanation(win)
     
     
     # move onto the real experiment
-    experiment(0, outlet, win, 0, 0) # testing purposes
-    #experiment(data_save_path, outlet, win, subject_name, subject_number)
+    #experiment(0, outlet, win, 0, 0) # testing purposes
+    experiment(outlet, win, subjectName, subjectId)
