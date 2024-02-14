@@ -1,26 +1,12 @@
 from screeninfo import get_monitors
 
-# number of practice and real stimuli the subject will be shown
-num_practice = 5
-num_real = 10
+# define constants relating to background color and text color
+background_color = (1,1,1) 
+text_color = (0, 0, 0) 
 
-background_color = (1,1,1) # background color for screen
-text_color = (0, 0, 0) # text color
 
-# get screen size for each monitor in the system
-def get_screen_info():
-    win_info = []
-    for m in get_monitors():
-        win_info.append((m.width, m.height))
-    return win_info
-
-# get info for subject screen
-win_info = get_screen_info()
-screen_size = win_info[0]
-screen_width = win_info[0][0]
-screen_height = win_info[0][1]
-
-# getting the valid letters and numbers for user info.
+# getting the valid letters and numbers for user to enter for either 
+# their name or their user number
 def get_valid_chars():
     valid_letters = []
     valid_numbers = []
@@ -39,8 +25,10 @@ def get_valid_chars():
     
     return valid_letters, valid_numbers
 
+# defining the valid letters and valid numbers as constants
 valid_letters, valid_numbers = get_valid_chars()
 
+# text to be shown during the study instructions screen
 explanation_text = 'instructions for the study go here. Press the "c" key to continue'
                 
 
