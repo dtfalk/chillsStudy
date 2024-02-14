@@ -17,36 +17,35 @@ def experiment(outlet, win, subjectName, subjectId):
     screenWidth, screenHeight = win.size  # This gives you the size of the window in pixels as an unpacked tuple (width, height)
 
     # Loop for handling events
-    # This loop runs until the three videos have been shown
+    # This loop runs until the three videos have been shown (until "all conditions are True"... to paraphrase the syntax on the line below)
     while not all(Conditions.values()):  # Loop until a video from each condition has been shown
 
         # selects a video according to the "selectVideo" function and then scales the video to be full screen
         videoPath = selectVideo(Conditions) 
         movie = visual.MovieStim(win, videoPath, size=None, loop=False, flipVert = False)
-        nativeWidth, nativeHeight = movie.size
-        scalingFactorWidth = screenWidth / nativeWidth
+        nativeWidth, nativeHeight = movie.size # nativeWidth translates to english as "the original width of the video" (same for nativeHeight)
+        scalingFactorWidth = screenWidth / nativeWidth # this line find the ratio to scale the video by to make it seem fullscreen
         scalingFactorHeight = screenHeight / nativeHeight
-        movie.size = (nativeWidth * scalingFactorWidth, nativeHeight * scalingFactorHeight)
+        movie.size = (nativeWidth * scalingFactorWidth, nativeHeight * scalingFactorHeight) # resize the native values by the scaling factors to get something akin to a fullscreen video
 
-        # shows a fixation cross for three seconds
+        # shows a fixation cross
         fixationCross(win)
 
         # shows the video
         while not movie.isFinished:
 
-            # draw the video on the screen
+            # draw the video on the screen and display to the subject
             movie.draw()
             win.flip()
 
-            # handles key presses (escape for exiting experiment, spacebar for sending a timestamped tag to LSL)
+            # handles key presses (escape for exiting the experiment, spacebar for sending a timestamped tag to LSL)
             for key in event.getKeys():
                 if key == 'escape': # escape will exit the study
-                    push_sample(outlet, 'ESCP')
+                    pushSample(outlet, 'ESCP')
                     win.close()
                     core.quit()
-                elif key == 'space': # spacebar for lsl stuff
-                    print('space bar pressed')
-                    push_sample(outlet, 'SPCE')
+                elif key == 'space': # spacebar for sending an LSL tag and timestamp via the outlet to the TBD inlet
+                    pushSample(outlet, 'SPCE')
 
         movie.stop() # kill the video once it is completed
         win.flip() # clear window
@@ -64,20 +63,20 @@ def experiment(outlet, win, subjectName, subjectId):
 if __name__ == '__main__':
     
     # Create LSL outlet
-    outlet = initialize_outlet()
+    outlet = initializeOutlet()
     
     # initialize an experiment window in psychopy
-    win = visual.Window(fullscr=True, color=background_color, units='norm')
+    win = visual.Window(fullscr=True, color=backgroundColor, units='norm')
 
     # initialize a mouse object and make the mouse invisible
     mouse = event.Mouse(win = win)
     mouse.setVisible(False)
     
     # retrieve user info (subject name and subject ID)
-    subjectName, subjectId = get_subject_info(win)
+    subjectName, subjectId = getSubjectInfo(win)
     
     # explain the experiment to the subject
-    experiment_explanation(win)
+    experimentExplanation(win)
     
     # present the experiment (videos + questionnaires) to the subject
     experiment(outlet, win, subjectName, subjectId)
