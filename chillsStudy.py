@@ -39,9 +39,14 @@ def experiment(outlet, win, subjectName, subjectId):
         fixationCross(win)
 
         # shows the video
+        tagPushed = False
         while not movie.isFinished:
 
             # draw the video on the screen and display to the subject
+            # also send an LSL tag denoting the start of the video
+            if not tagPushed:
+                win.callOnFlip(outlet.push_sample(['VideoStart']))
+                tagPushed = True
             movie.draw()
             win.flip()
 

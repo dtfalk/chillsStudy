@@ -13,7 +13,8 @@ import random
 
 # Initializes lab streaming layer outlet
 def initializeOutlet():
-    infoEvents = StreamInfo('eventStream', 'events', 1, 0, 'string')
+    infoEvents = StreamInfo(name = 'DataSyncMarker', type = 'Tags', channel_count = 1, 
+                            nominal_srate = 0, channel_format ='string', source_id = '12345')
     outlet = StreamOutlet(infoEvents)
     return outlet
 
