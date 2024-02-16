@@ -7,7 +7,6 @@
 # ( COMES AFTER WE CHECK THE CLICKED VARIABLE'S STATUS??????)
 from psychopy import visual, core
 from helperFunctions import *
-import csv
 
     
 # The experiment itself
