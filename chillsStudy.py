@@ -44,7 +44,7 @@ def experiment(outlet, win, subjectName, subjectId):
             # draw the video on the screen and display to the subject
             # also send an LSL tag denoting the start of the video
             if not tagPushed:
-                win.callOnFlip(outlet.push_sample(['VideoStart']))
+                win.callOnFlip(pushSample, outlet, 'VideoStart')
                 tagPushed = True
             movie.draw()
             win.flip()
@@ -57,7 +57,7 @@ def experiment(outlet, win, subjectName, subjectId):
                     core.quit()
                 elif key == 'space': # spacebar for sending an LSL tag and timestamp via the outlet to the TBD inlet
                     pushSample(outlet, 'SPCE')
-
+        pushSample(outlet, 'VideoStop')
         movie.stop() # kill the video once it is completed
         win.flip() # clear window
 
