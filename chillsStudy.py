@@ -7,7 +7,6 @@
 # ( COMES AFTER WE CHECK THE CLICKED VARIABLE'S STATUS??????)
 from psychopy import visual, core
 from helperFunctions import *
-import csv
 
     
 # The experiment itself
@@ -45,7 +44,7 @@ def experiment(outlet, win, subjectName, subjectId):
             # draw the video on the screen and display to the subject
             # also send an LSL tag denoting the start of the video
             if not tagPushed:
-                win.callOnFlip(outlet.push_sample(['VideoStart']))
+                win.callOnFlip(pushSample, outlet, 'VideoStart')
                 tagPushed = True
             movie.draw()
             win.flip()
