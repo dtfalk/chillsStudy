@@ -92,9 +92,9 @@ You may want to change a couple of things in the experiment such as the color sc
 
 4. **How to add a new video and/or new condition:** Currently, the experiment is broken up into three conditions (I do not know what the different conditions mean) with three videos per condition. It is possible that you want to add another video or another condition. Let's go through how to do that.
 
-**Adding a video to an existing condition:** To do this, simply add another video (mp4 preferably) to the condition that you want. That is all that you need to do.
+    **Adding a video to an existing condition:** To do this, simply add another video (mp4 preferably) to the condition that you want. That is all that you need to do.
 
-**Adding a new condition:** This one is slightly more complicated, but just barely. There are currently three conditions in the study. The first thing you need to do to add a fourth condition is create a new folder in **stimuli** and name it **condition4** and add your condition 4 videos to this folder. Then open the **chillsStudy.py** file and find the **experiment** function. You will see is a variable called **Conditions**. It looks like this...
+    **Adding a new condition:** This one is slightly more complicated, but just barely. There are currently three conditions in the study. The first thing you need to do to add a fourth condition is create a new folder in **stimuli** and name it **condition4** and add your condition 4 videos to this folder. Then open the **chillsStudy.py** file and find the **experiment** function. You will see is a variable called **Conditions**. It looks like this...
 
     >
         # The experiment itself
