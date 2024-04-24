@@ -1,26 +1,23 @@
-# SEE IF THERE IS AN EASY WAY TO CHECK IF MOUSE RELEASES AS OPPOSED TO WHEN THE MOUSE GETS PRESSED.
-# ADD A SUBMIT BUTTON AND MAKE SURE THAT AT LEAST ONE OPTION IS PRESSED BEFORE WE ALLOW THE USER TO SUBMIT
-# DO NOT ALLOW MULTIPLE PRESSES OF A BUTTON (E.G THE SUBMIT BUTTON) BY HOLDING DOWN THE CLICK BUTTON 
-# (FOR THE ABOVE USE A TIMER OR MAKE SURE THAT THE USER HAS UNCLICKED BEFORE WE ALLOW A CLICK TO BE REGISTERED)
-# (TO CHECK IF USER HAS UNCLICKED WE COULD HAVE A BOOLEAN THAT IS SET TO TRUE WHEN CLICKED AND FALSE ONCE UNCLICKED)
-# ( AND WE ONLY ALLOW CLICKS TO BE REGISTERED IF IT IS FALSE BUT NEED TO MAKE SURE THE LOGIC FOR SETTING CLICKED = TRUE)
-# ( COMES AFTER WE CHECK THE CLICKED VARIABLE'S STATUS??????)
+# Hello, this experiment was coded by David Falk of the APEX/Nusbaum lab at 
+# the University of Chicago (2024). It was coded for Gabe Rodriguez as a 
+# part of his research into physiological reactions to media, "chills"
+# in particular. I will admit, it is a bit rough and could be improved in 
+# many places. Sorry to all future coders!
+# Please see the README for more information about this code
+# and how to modify it to suit your particular needs.
 from psychopy import visual, core
 from helperFunctions import *
 
     
 # The experiment itself
-def experiment(outlet, win, subjectName, subjectId):
-
+def experiment(outlet, win, mouse, subjectName, subjectId):
+    
     # dictionary of booleans to track which experimental stimuli types have been used
     Conditions = {
         'condition1' : False,
         'condition2' : False,
         'condition3' : False
     }
-
-    # variables for sorting out how to scale the videos to be full screen
-    screenWidth, screenHeight = win.size  # This gives you the size of the window in pixels as an unpacked tuple (width, height)
 
     # Loop for handling events
     # This loop runs until the three videos have been shown (until "all conditions are True"... to paraphrase the syntax on the line below)
@@ -46,7 +43,10 @@ def experiment(outlet, win, subjectName, subjectId):
             if not tagPushed:
                 win.callOnFlip(pushSample, outlet, 'VideoStart')
                 tagPushed = True
+                timestamps = [] # stores timestamps for spacebar presses (Behavorial)
+            
             movie.draw()
+            win.mouseVisible = False
             win.flip()
 
             # handles key presses (escape for exiting the experiment, spacebar for sending a timestamped tag to LSL)
@@ -56,13 +56,20 @@ def experiment(outlet, win, subjectName, subjectId):
                     win.close()
                     core.quit()
                 elif key == 'space': # spacebar for sending an LSL tag and timestamp via the outlet to the TBD inlet
+                    timestamp = (movie.getPercentageComplete() / 100) * movie.duration # gets the timestamp in seconds
+                    timestamps.append(timestamp)
+                    print(timestamp)
                     pushSample(outlet, 'SPCE')
+                    
         pushSample(outlet, 'VideoStop')
         movie.stop() # kill the video once it is completed
-        win.flip() # clear window
+        win.mouseVisible = False
+        win.flip() # clear window 
 
         # present the questionnaire to the subject and save their responses in a csv within the "data" folder
-        data = questionnaire(win)
+        # also saves timestamps of user spacebar presses
+        saveTimestamps(str(subjectId), timestamps, str(os.path.basename(videoPath)[0]))
+        data = questionnaire(win, mouse)
         saveSubjectData(str(subjectName), str(subjectId), data, str(os.path.basename(videoPath)[0]))
     
     # after exiting the while loop (after all videos and questionnaires have been presented), terminate the experiment
@@ -78,10 +85,10 @@ if __name__ == '__main__':
     
     # initialize an experiment window in psychopy
     win = visual.Window(fullscr=True, color=backgroundColor, units='norm')
+    screenWidth, screenHeight = win.size  # This gives you the size of the window in pixels as an unpacked tuple (width, height)
 
-    # initialize a mouse object and make the mouse invisible
+    # initialize a mouse object
     mouse = event.Mouse(win = win)
-    mouse.setVisible(False)
     
     # retrieve user info (subject name and subject ID)
     subjectName, subjectId = getSubjectInfo(win)
@@ -90,4 +97,7 @@ if __name__ == '__main__':
     experimentExplanation(win)
     
     # present the experiment (videos + questionnaires) to the subject
-    experiment(outlet, win, subjectName, subjectId)
+    experiment(outlet, win, mouse, subjectName, subjectId)
+
+    # thank the user for their time etc...
+    exitScreen(win)

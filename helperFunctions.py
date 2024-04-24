@@ -2,8 +2,8 @@ import os
 from pylsl import StreamOutlet, StreamInfo
 from psychopy import visual, core, event
 import csv
-from constants import *
 import random
+from constants import *
 
 # =========================================================================
 # the functions below are for initializing a lab streaming layer (LSL) outlet
@@ -36,7 +36,6 @@ def pushSample(outlet, tag):
 
 # gets the subject's name and subject number
 def getSubjectInfo(win):
-    
     # get subject name and subject number
     subjectName = getSubjectName(win)
     subjectNum = getSubjectNum(win)
@@ -67,6 +66,7 @@ def getSubjectName(win):
                 subjectName = subjectName + key
         prompt = visual.TextStim(win = win, text = namePrompt + subjectName, height = 0.2, color = textColor)
         prompt.draw()
+        win.mouseVisible = False
         win.flip()
 
 
@@ -91,6 +91,7 @@ def getSubjectNum(win):
                 subjectNum = subjectNum + key
         prompt = visual.TextStim(win = win, text = numPrompt + subjectNum, height = 0.2, color = textColor)
         prompt.draw()
+        win.mouseVisible = False
         win.flip()
 
 # =========================================================================
@@ -106,92 +107,109 @@ def getSubjectNum(win):
 # =========================================================================
 
 # contains questionnaire questions and displays questionnaire to the subject
-def questionnaire(win):
-    width, height = win.size
-    windowScale = width / height
+def questionnaire(win, mouse):
+    win.mouseVisible = True
 
-    # question 1 text and responses
-    question1 = visual.TextStim(win, text='How interested were you in this video? Please click an option.', wrapWidth= 1.5, pos=(0, 0.4), color = (0,0,0))
-    options1 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
-    optionStim1 = [visual.TextStim(win, text=opt, color = (0,0,0), alignText = 'left', pos=(0, 0.1 - 0.1 * i)) for i, opt in enumerate(options1)]
-    checkboxes1 = [visual.Rect(win, width=0.03, height=0.03 * windowScale, color = (0,0,0), pos=(-0.6, 0.1 - 0.1 * i)) for i in range(len(options1))]
+    # variables to hold all of the questions and their associated response options
+    questionsTotal = []
+    optionsTotal = []
 
-    # question 2 text and responses
-    question2 = visual.TextStim(win, text='How chilling did you find this video? Please click an option.', wrapWidth= 1.5, pos=(0, 0.4), color = (0,0,0))
-    options2 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
-    optionStim2 = [visual.TextStim(win, text=opt, color = (0,0,0), alignText = 'left', pos=(0, 0.1 - 0.1 * i)) for i, opt in enumerate(options2)]
-    checkboxes2 = [visual.Rect(win, width=0.03, height=0.03 * windowScale, color = (0,0,0), pos=(-0.6, 0.1 - 0.1 * i)) for i in range(len(options2))]
+    # question 1 text and response options
+    question1 = visual.TextStim(win, text='How interested were you in this video? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+    ResponseOptions1 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
+    questionsTotal.append(question1)
+    optionsTotal.append(ResponseOptions1)
 
-    # question 3 text and responses
-    question3 = visual.TextStim(win, text='How intense were your chills from this video? Please click an option.', wrapWidth= 1.5, pos=(0, 0.4), color = (0,0,0))
-    options3 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
-    optionStim3 = [visual.TextStim(win, text=opt, color = (0,0,0), alignText = 'left', pos=(0, 0.1 - 0.1 * i)) for i, opt in enumerate(options3)]
-    checkboxes3 = [visual.Rect(win, width=0.03, height=0.03 * windowScale, color = (0,0,0), pos=(-0.6, 0.1 - 0.1 * i)) for i in range(len(options3))]
+    # question 2 text and response options
+    question2 = visual.TextStim(win, text='How chilling did you find this video? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+    ResponseOptions2 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
+    questionsTotal.append(question2)
+    optionsTotal.append(ResponseOptions2)
 
-    # question 4 text and responses
-    question4 = visual.TextStim(win, text='How much did you enjoy this video? Please click an option.', wrapWidth= 1.5, pos=(0, 0.4), color = (0,0,0))
-    options4 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
-    optionStim4 = [visual.TextStim(win, text=opt, color = (0,0,0), alignText = 'left', pos=(0, 0.1 - 0.1 * i)) for i, opt in enumerate(options4)]
-    checkboxes4 = [visual.Rect(win, width=0.03, height=0.03 * windowScale, color = (0,0,0), pos=(-0.6, 0.1 - 0.1 * i)) for i in range(len(options4))]
+    # question 3 text and response options
+    question3 = visual.TextStim(win, text='How intense were your chills from this video? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+    ResponseOptions3 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
+    questionsTotal.append(question3)
+    optionsTotal.append(ResponseOptions3)
 
-    # question 5 text and responses
-    question5 = visual.TextStim(win, text='How emotional did you feel while watching this video? Please click an option.', wrapWidth= 1.5, pos=(0, 0.4), color = (0,0,0))
-    options5 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
-    optionStim5 = [visual.TextStim(win, text=opt, color = (0,0,0), alignText = 'left', pos=(0, 0.1 - 0.1 * i)) for i, opt in enumerate(options5)]
-    checkboxes5 = [visual.Rect(win, width=0.03, height=0.03 * windowScale, color = (0,0,0), pos=(-0.6, 0.1 - 0.1 * i)) for i in range(len(options5))]
+    # question 4 text and response options
+    question4 = visual.TextStim(win, text='How much did you enjoy this video? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+    ResponseOptions4 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
+    questionsTotal.append(question4)
+    optionsTotal.append(ResponseOptions4)
 
-    # question 6 text and responses
-    question6 = visual.TextStim(win, text='How likely would you be to watch this video again? Please click an option.', wrapWidth= 1.5, pos=(0, 0.4), color = (0,0,0))
-    options6 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
-    optionStim6 = [visual.TextStim(win, text=opt, color = (0,0,0), alignText = 'left', pos=(0, 0.1 - 0.1 * i)) for i, opt in enumerate(options6)]
-    checkboxes6 = [visual.Rect(win, width=0.03, height=0.03 * windowScale, color = (0,0,0), pos=(-0.6, 0.1 - 0.1 * i)) for i in range(len(options6))]
+    # question 5 text and response options
+    question5 = visual.TextStim(win, text='How emotional did you feel while watching this video? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+    ResponseOptions5 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
+    questionsTotal.append(question5)
+    optionsTotal.append(ResponseOptions5)
 
-    # question 7 text and responses
-    question7 = visual.TextStim(win, text='How likely would you be to share this video? Please click an option.', wrapWidth= 1.5, pos=(0, 0.4), color = (0,0,0))
-    options7 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
-    optionStim7 = [visual.TextStim(win, text=opt, color = (0,0,0), alignText = 'left', pos=(0, 0.1 - 0.1 * i)) for i, opt in enumerate(options7)]
-    checkboxes7 = [visual.Rect(win, width=0.03, height=0.03 * windowScale, color = (0,0,0), pos=(-0.6, 0.1 - 0.1 * i)) for i in range(len(options7))]
+    # question 6 text and response options
+    question6 = visual.TextStim(win, text='How likely would you be to watch this video again? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+    ResponseOptions6 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
+    questionsTotal.append(question6)
+    optionsTotal.append(ResponseOptions6)
 
-    # overall variables for the multiple different questions
-    questionsTotal = [question1, question2, question3, question4, question5, question6, question7]
-    optionsTotal = [options1, options2, options3, options4, options5, options6, options7]
-    optionStimsTotal = [optionStim1, optionStim2, optionStim3, optionStim4, optionStim5, optionStim6, optionStim7]
-    checkboxesTotal = [checkboxes1, checkboxes2, checkboxes3, checkboxes4, checkboxes5, checkboxes6, checkboxes7]
+    # question 7 text and response options
+    question7 = visual.TextStim(win, text='How likely would you be to share this video? Please click an option and then click submit', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+    ResponseOptions7 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
+    questionsTotal.append(question7)
+    optionsTotal.append(ResponseOptions7)
 
-    mouse = event.Mouse(win=win)
-    selectedOption = None
+    # Final outcome will be a list of lists ("checkboxes") where each sublist is populated with
+    # the options for that question ("Button" objects). 
+    # 7 questions? Then checkboxes has 7 sublists. 
+    # Question 1 has 5 options? Then len(checkboxes[0]) = 5.
+    checkboxes = [] 
+    for options in optionsTotal:
+        curOptions = []
+        for j, option in enumerate(options):
+            curOptions.append(Button(win, 'option', option, j))
+        checkboxes.append(curOptions.copy())
+    
+    submitButton = Button(win, 'submit', 'Submit', -1) # submit button
+    data = [] # for storing answers to each question
 
-    things = zip(questionsTotal, optionsTotal, optionStimsTotal, checkboxesTotal)
-    data = []
-    for question, options, optionStims, checkboxes in things:
-        selectedOption = None
-        while selectedOption is None:
-            question.draw()
-            for optionStim, checkbox in zip(optionStims, checkboxes):
-                checkbox.draw()
-                optionStim.draw()
+    # iterate over each question and display to user
+    for options, question in zip(checkboxes, questionsTotal):
+        button_was_down = False # keep track if mouse was clicked in previous frame
+        while True:
+            for key in event.getKeys():
+                if key == 'escape': # escape will exit the study
+                    win.close()
+                    core.quit()
+
+            submitButton.checkbox.draw()
+            submitButton.text.draw()
+            question.draw() # display the question we show to the user
+            current_button_down = mouse.getPressed()[0] # mouse state on current frame
             
-        
-            # Check for mouse clicks
-            if mouse.getPressed()[0]:  # If the left mouse button is clicked
-                for i, checkbox in enumerate(checkboxes):
-                    if mouse.isPressedIn(checkbox):
-                        clearCheckboxes(checkboxes)  # Clear all checkboxes (for single-selection)
-                        checkbox.fillColor = 'black'  # Fill the clicked checkbox
-                        selectedOption = i  # Save the selected option index
-                        data.append(options[selectedOption])
-                        break
+            for option in options: # display each option (checkbox + text)
+                option.checkbox.draw() # draw the checkbox
+                option.text.draw() # draw the associated text
+            
+            # if the user clicks and releases within the checkbox
+            if button_was_down and not current_button_down:
+                for option in options: # option button clicks
+                    if option.checkbox.contains(mouse.getPos()):
+                        option.handleClick()
 
+                if submitButton.checkbox.contains(mouse.getPos()): # submit button clicks
+                    answerFound = False
+                    for option in options:
+                        if option.checked:
+                            answerFound = True
+                            data.append(option.text.text)
+                            submitButton.handleClick()
+                    if answerFound:
+                        break
+             
+            button_was_down = current_button_down # update variables
             win.flip()
-            core.wait(0.2)
+        win.flip()
     return data
 
 
-# Function to clear all checkboxes (for single-selection logic)
-def clearCheckboxes(checkboxes):
-    for checkbox in checkboxes:
-        checkbox.fillColor = None
-
 # =========================================================================
 # =========================================================================
 
@@ -200,18 +218,15 @@ def clearCheckboxes(checkboxes):
 
 
 # =========================================================================
-# the functions below are for presenting stimuli, saving data, or would fall
-# into the "other" category relative to the categories of functions described
-# above.
+# the functions below are for message screens (e.g. instructions)
 # =========================================================================
         
 # explains the experiment to the subject
 def experimentExplanation(win):
-    
     # text height and preparing the explanation text
     height = 0.07
     prompt = visual.TextStim(win = win, text = explanationText, height = height,
-                            color = textColor, wrapWidth = 1.9, alignText = 'left')
+                            color = textColor, wrapWidth = 1.9, alignText = 'center')
     
     # wait for the user to press the "c" key before the experiment continues
     while True:
@@ -224,75 +239,38 @@ def experimentExplanation(win):
                 core.quit()
 
             # pressing the "c" key lets the user progress to the videos
-            if key == 'c':
+            if key == 'return':
                 return
         
         # draw the prompt on the screen and display it to the user
         prompt.draw()
+        win.mouseVisible = False
         win.flip()
 
-
-# randomly selects an unused category of videos and then randomly selects a video from that category
-def selectVideo(Conditions):
+# explains the experiment to the subject
+def exitScreen(win):
+    # text height and preparing the explanation text
+    height = 0.07
+    prompt = visual.TextStim(win = win, text = exitScreenText, height = height,
+                            color = textColor, wrapWidth = 1.9, alignText = 'center')
     
-    # stores current directory of the file and the path of stimuli folder where the videos are stored
-    curDir = os.path.dirname(__file__)
-    stimuliDir = os.path.join(curDir, 'stimuli')
-
-    # a dictionary that allows us to convert numbers to letters so we can do some math later on in
-    # the function to randomly select a video
-    numberToLetter = {
-        '1' : 'a',
-        '2' : 'b',
-        '3' : 'c',
-        '4' : 'd',
-        '5' : 'e',
-        '6' : 'f',
-        '7' : 'g',
-        '8' : 'h',
-        '9' : 'i'
-    }
-
-    # variable to keep track of which stimuli have been used according to the "Conditions" dictionary
-    unusedConditions = []
-
-    # iterate over the three conditions in the "Conditions" dictionary to see which conditions have not been
-    # used so we know which conditions we can randomly draw from
-    for condition, used in Conditions.items():
-        if not used:
-            unusedConditions.append(condition)
-    
-    # randomly choose an unused condition from the list of unused conditions
-    selectedConditionOld = random.choice(unusedConditions)
-
-    # Translation of our selected condition's name into an integer (honestly cannot explain this well but it works)
-    # (Something to do with indexing from zero in one case vs indexing from one in other cases)
-    # (It has to do with the math in the line below and the "numberToLetter" dictionary above so we can randomly choose
-    # a video from the selected condition)
-    selectedCondition = int(selectedConditionOld.replace('condition', '')) - 1
-
-    # Given a condition, we randomly select one of the three videos from that condition 
-    # (ask Gabe to give you access to the box folder with the videos and check the README to see how to create the file structure for the stimuli)
-    selectedVideo = str(numberToLetter[str((selectedCondition * 3) + random.randint(1,3))]) + '.mov.mp4'
-
-    # create the final path for the selected video
-    #finalVideoPath = os.path.join(stimuliDir, 'condition1', 'aTest.mov.mp4')
-    finalVideoPath = os.path.join(stimuliDir, selectedConditionOld, selectedVideo)
-
-    # for the condition we selected the video from, set the associated dictionary entry to "True"
-    # to reflect that the selected condition has been used
-    Conditions[str(selectedConditionOld)] = True
-
-    # print and return the path to the video (print statement is for testing purposes)
-    print('\n\n\nFinal video Path: %s \n\n\n' %finalVideoPath)
-    return finalVideoPath
-
+    # wait for the user to press the "c" key before the experiment continues
+    while True:
+        keys = event.getKeys()
+        for key in keys:
+            # pressing escape exits the study
+            if key == 'escape':
+                win.close()
+                core.quit()
+        
+        # draw the prompt on the screen and display it to the user
+        prompt.draw()
+        win.mouseVisible = False
+        win.flip()
 
 # Displays a fixation cross before each video
 def fixationCross(win):
-
-    # time that fixation cross is on the screen
-    waitTime = 3
+    waitTime = 3 # time that fixation cross is on the screen
 
     # variables for dimension of screen to properly draw/scale fixation cross
     width, height = win.size
@@ -309,12 +287,84 @@ def fixationCross(win):
     
     # drawing fixation cross
     fixation.draw()
+    win.mouseVisible = False
     win.flip()
 
     # waits the specified amount of time before removing fixation cross and displaying the next video
     core.wait(waitTime)
     return
 
+# =========================================================================
+# =========================================================================
+
+
+
+# =========================================================================
+# the functions below are for presenting stimuli, saving data, or would fall
+# into the "other" category relative to the categories of functions described
+# above.
+# =========================================================================
+
+# randomly selects an unused category of videos and then randomly selects a video from that category
+def selectVideo(Conditions):
+    
+    # stores current directory of the file and the path of stimuli folder where the videos are stored
+    curDir = os.path.dirname(__file__)
+    stimuliDir = os.path.join(curDir, 'stimuli')
+
+    # variable to keep track of which stimuli have been used according to the "Conditions" dictionary
+    unusedConditions = []
+
+    # iterate over the three conditions in the "Conditions" dictionary to see which conditions have not been
+    # used so we know which conditions we can randomly draw from
+    for condition, used in Conditions.items():
+        if not used:
+            unusedConditions.append(condition)
+    
+    # randomly choose an unused condition from the list of unused conditions
+    selectedCondition = random.choice(unusedConditions)
+
+    # Given a condition, we randomly select one of the three videos from that condition 
+    # (ask Gabe to give you access to the box folder with the videos and check the README to see how to create the file structure for the stimuli)
+    selectedVideo = random.choice(os.listdir(os.path.join(stimuliDir, selectedCondition)))
+
+    # create the final path for the selected video
+    finalVideoPath = os.path.join(stimuliDir, selectedCondition, selectedVideo)
+
+    # for the condition we selected the video from, set the associated dictionary entry to "True"
+    # to reflect that the selected condition has been used
+    Conditions[str(selectedCondition)] = True
+
+    # print and return the path to the video (print statement is for testing purposes)
+    print('\n\n\nFinal video Path: %s \n\n\n' %finalVideoPath)
+    return finalVideoPath
+
+# saves the timestamps of when the user pressed the spacebar
+def saveTimestamps(subjectId, timestamps, videoName):
+    # define our file paths for where we are going to store the subjec's responses to a questionnaire
+    curDir = os.path.dirname(__file__)
+    dataFolderPath = os.path.join(curDir, 'data')
+    subjectDataFolderPath = os.path.join(dataFolderPath, subjectId)
+    dataFilePath = os.path.join(subjectDataFolderPath, str(videoName) + 'Timestamps.csv')
+
+    # create data folder if it does not exist
+    if not os.path.exists(dataFolderPath):
+        os.mkdir(dataFolderPath)
+    
+    # create subject's data folder if it does not exist
+    if not os.path.exists(subjectDataFolderPath):
+        os.mkdir(subjectDataFolderPath)
+
+    # CSV header
+    header = ['timestamps (seconds)']
+
+    # write the header and the data to a CSV file in the "data" folder
+    with open(file = dataFilePath, mode = 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+        for timestamp in timestamps:
+            writer.writerow([timestamp])
+    return
 
 # for a given subject and video, save their responses to the questionnaire to a csv file in the "data" folder
 def saveSubjectData(subjectName, subjectId, data, videoName):
@@ -342,5 +392,6 @@ def saveSubjectData(subjectName, subjectId, data, videoName):
         writer.writerow(header)
         writer.writerow([subjectName] + data)
     return
-    
+
+
     
