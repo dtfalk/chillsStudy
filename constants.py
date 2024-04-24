@@ -9,13 +9,18 @@ questionSelectedColor = 'red'
 explanationText = 'Thank you for taking the time to participate in our experiment.\n\n\
     In this experiment you will watch three videos.\n\n\
     Please press the SPACEBAR when you feel a chill.\n\n\
-    Before each video you will see a cross in the middle of the screen for a few seconds.\n\n\
+    Before each video begins you will see a cross in the middle of the screen for a few seconds.\n\n\
     Please focus on this cross while it is on the screen.\n\n\
     Press the "return" key when you are ready to proceed to your first video.'
 
+# text to be shown during the study instructions screen
+reminderText = 'Press the "return" key when you are ready to proceed to your next video.\n\n\
+    Remember to press the SPACEBAR when you feel a chill.\n\n\
+    Please focus your eyes on the cross you will see before the video begins.'
+
 # text for the exit screen
-exitScreenText = 'Thank you for taking the time to participate in our study.\
-    Please inform the experimenter that you are finished.\n\n\n\n\
+exitScreenText = 'Thank you for taking the time to participate in our study.\n\n\
+    Please inform the experimenter that you are finished.\n\n\
     (For the experimenter: press the escape key to exit)'
 
 # getting the valid letters and numbers for user to enter for either 

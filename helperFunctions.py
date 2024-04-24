@@ -247,6 +247,32 @@ def experimentExplanation(win):
         win.mouseVisible = False
         win.flip()
 
+# reminds the user of the instructions between each video
+def reminderScreen(win):
+    # text height and preparing the explanation text
+    height = 0.07
+    prompt = visual.TextStim(win = win, text = reminderText, height = height,
+                            color = textColor, wrapWidth = 1.9, alignText = 'center')
+    
+    # wait for the user to press the "c" key before the experiment continues
+    while True:
+        keys = event.getKeys()
+        for key in keys:
+
+            # pressing escape exits the study
+            if key == 'escape':
+                win.close()
+                core.quit()
+
+            # pressing the "c" key lets the user progress to the videos
+            if key == 'return':
+                return
+        
+        # draw the prompt on the screen and display it to the user
+        prompt.draw()
+        win.mouseVisible = False
+        win.flip()
+
 # explains the experiment to the subject
 def exitScreen(win):
     # text height and preparing the explanation text

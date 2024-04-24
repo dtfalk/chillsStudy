@@ -23,6 +23,9 @@ def experiment(outlet, win, mouse, subjectName, subjectId):
     # This loop runs until the three videos have been shown (until "all conditions are True"... to paraphrase the syntax on the line below)
     while not all(Conditions.values()):  # Loop until a video from each condition has been shown
 
+        if any(Conditions.values()): # reminds the user of the instructions between each stimuli
+            reminderScreen(win)
+
         # selects a video according to the "selectVideo" function and then scales the video to be full screen
         videoPath = selectVideo(Conditions) 
         movie = visual.MovieStim(win, videoPath, size=None, loop=False, flipVert = False)
@@ -58,7 +61,6 @@ def experiment(outlet, win, mouse, subjectName, subjectId):
                 elif key == 'space': # spacebar for sending an LSL tag and timestamp via the outlet to the TBD inlet
                     timestamp = (movie.getPercentageComplete() / 100) * movie.duration # gets the timestamp in seconds
                     timestamps.append(timestamp)
-                    print(timestamp)
                     pushSample(outlet, 'SPCE')
                     
         pushSample(outlet, 'VideoStop')
@@ -72,9 +74,7 @@ def experiment(outlet, win, mouse, subjectName, subjectId):
         data = questionnaire(win, mouse)
         saveSubjectData(str(subjectName), str(subjectId), data, str(os.path.basename(videoPath)[0]))
     
-    # after exiting the while loop (after all videos and questionnaires have been presented), terminate the experiment
-    win.close()
-    core.quit()
+    # after exiting the while loop (after all videos and questionnaires have been presented) return
     return
 
 
