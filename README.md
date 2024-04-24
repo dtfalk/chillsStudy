@@ -7,7 +7,7 @@ This is the contact info for David Falk, the coder for this experiment
 email: dtfbaseball@gmail.com (UPDATE THIS)
 cell: 1-413-884-2553
 
-How to install Anaconda and Download necessary packages
+How to install Anaconda and download necessary packages
 -------------------------------------------------
 
 **Anaconada:** The first thing you need is a package manager. I would reccomend using Anaconda. Download Anaconda from this link: https://www.anaconda.com/download. If they ask you to provide an email there is a button that will allow you to skip this step. Once Anaconda is downloaded you need to open up the anaconda prompt or open a terminal of some kind. You can also use the Anaconda Navigator, but that is more complicated. Once you open your terminal/Anaconda Prompt use the following code to create an environment, activate your environment, and download the proper Python version.
@@ -19,7 +19,7 @@ How to install Anaconda and Download necessary packages
 
 **Packages:** Now you need to install the required packages for the environment using the code below (make sure your environment is activated):
 
->    pip install psychopy==2023.2.3 pylsl==1.16.2
+>   pip install psychopy==2023.2.3 pylsl==1.16.2
 
 Great! You have everything you need now.
 
@@ -37,31 +37,7 @@ Downloading the code and the stimuli
 
 5. Place stimuli **a**,**b**, and **c** in **condition1**. Place stimuli **d**,**e**, and **f** in **condition2**. Place stimuli **g**,**h**, and **i** in **condition3**.
 
-Great! you now have the code, the stimuli, and all of the proper packages downloaded! Your **chillsStudy** folder should look like this: 
-
->
-chillsStudy
-│   chillsStudy.py
-│   constants.py
-│   helperFunctions.py
-│   README.md
-│
-├───stimuli
-│   ├───condition1
-│   │       a.mov.mp4
-│   │       b.mov.mp4
-│   │       c.mov.mp4
-│   │
-│   ├───condition2
-│   │       d.mov.mp4
-│   │       e.mov.mp4
-│   │       f.mov.mp4
-│   │
-│   └───condition3
-│           g.mov.mp4
-│           h.mov.mp4
-│           i.mov.mp4
-
+Great! you now have the code, the stimuli, and all of the proper packages downloaded!
 
 Running the code
 --------------------------------------
@@ -92,27 +68,27 @@ You may want to change a couple of things in the experiment such as the color sc
 
 3. **Adding more questions to the questionnaire, changing questionnaire wording, changing wording of the response options:** It is possible that you may want to add more questions, change some wording, or change the options that the user can select from. To do this, first navigate to the **helperFunctions.py** file. Then find the **questionnaire** function. Towards the top of the function you will see code like this...
 
->
-    # question 1 text and response options
-    question1 = visual.TextStim(win, text='How interested were you in this video? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
-    ResponseOptions1 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
+    >
+        # question 1 text and response options
+        question1 = visual.TextStim(win, text='How interested were you in this video? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+        ResponseOptions1 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
 
-    # question 2 text and response options
-    question2 = visual.TextStim(win, text='How chilling did you find this video? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
-    ResponseOptions2 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
+        # question 2 text and response options
+        question2 = visual.TextStim(win, text='How chilling did you find this video? Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+        ResponseOptions2 = ['Very slightly or not at all', 'A little', 'Moderately', 'Quite a bit', 'Extremely']
 
-This is where we define the questions and their responses. If you want to change a question one's wording, then change the **text = ...** entry in the **question1** variable. Just change the stuff within the quotation marks. Similarly, if you want to change one of the options that the user has to choose from, for example the **Very slightly or not at all** option in **ResponseOptions1**, then change the text that says **Very slightly or not at all** to something else (change the stuff within the quotation marks).
+    This is where we define the questions and their responses. If you want to change a question one's wording, then change the **text = ...** entry in the **question1** variable. Just change the stuff within the quotation marks. Similarly, if you want to change one of the options that the user has to choose from, for example the **Very slightly or not at all** option in **ResponseOptions1**, then change the text that says **Very slightly or not at all** to something else (change the stuff within the quotation marks).
 
-If you would like to add another question, let's call it question 8, then do something like this below the variables for question 7...
+    If you would like to add another question, let's call it question 8, then do something like this below the variables for question 7...
 
->
-    # question 8 text and response options
-    question8 = visual.TextStim(win, text='THIS IS THE TEXT FOR QUESTION 8. Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
-    ResponseOptions8 = ['option 1', 'option 2', ... , 'option N']
-    questionsTotal.append(question8)
-    optionsTotal.append(ResponseOptions8)
+    >
+        # question 8 text and response options
+        question8 = visual.TextStim(win, text='THIS IS THE TEXT FOR QUESTION 8. Please select an option and then click Submit.', wrapWidth= 1.5, pos=(0, 0.4), color = textColor)
+        ResponseOptions8 = ['option 1', 'option 2', ... , 'option N']
+        questionsTotal.append(question8)
+        optionsTotal.append(ResponseOptions8)
 
-That will do it! You have now added an 8th question!
+    That will do it! You have now added an 8th question!
 
 4. **How to add a new video and/or new condition:** Currently, the experiment is broken up into three conditions (I do not know what the different conditions mean) with three videos per condition. It is possible that you want to add another video or another condition. Let's go through how to do that.
 
@@ -120,32 +96,32 @@ That will do it! You have now added an 8th question!
 
 **Adding a new condition:** This one is slightly more complicated, but just barely. There are currently three conditions in the study. The first thing you need to do to add a fourth condition is create a new folder in **stimuli** and name it **condition4** and add your condition 4 videos to this folder. Then open the **chillsStudy.py** file and find the **experiment** function. You will see is a variable called **Conditions**. It looks like this...
 
->
-    # The experiment itself
-    def experiment(outlet, win, mouse, subjectName, subjectId):
-        
-        # dictionary of booleans to track which experimental stimuli types have been used
-        Conditions = {
-            'condition1' : False,
-            'condition2' : False,
-            'condition3' : False
-        }
+    >
+        # The experiment itself
+        def experiment(outlet, win, mouse, subjectName, subjectId):
+            
+            # dictionary of booleans to track which experimental stimuli types have been used
+            Conditions = {
+                'condition1' : False,
+                'condition2' : False,
+                'condition3' : False
+            }
 
-Add a line to the **Conditions** variable that says **'condition4' : False'** and make sure to add a comma after the **False** in the **condition3** line. Your modified function will look like this...
+    Add a line to the **Conditions** variable that says **'condition4' : False'** and make sure to add a comma after the **False** in the **condition3** line. Your modified function will look like this...
 
->
-    # The experiment itself
-    def experiment(outlet, win, mouse, subjectName, subjectId):
-        
-        # dictionary of booleans to track which experimental stimuli types have been used
-        Conditions = {
-            'condition1' : False,
-            'condition2' : False,
-            'condition3' : False,
-            'condition4' : False
-        }
+    >
+        # The experiment itself
+        def experiment(outlet, win, mouse, subjectName, subjectId):
+            
+            # dictionary of booleans to track which experimental stimuli types have been used
+            Conditions = {
+                'condition1' : False,
+                'condition2' : False,
+                'condition3' : False,
+                'condition4' : False
+            }
 
-You have now added a new condition! That is all you need to do. Congrats.
+    You have now added a new condition! That is all you need to do. Congrats.
 
 
 
